@@ -16,6 +16,7 @@ void setup() {
   Serial.println("Booting");
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
+  
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
     Serial.println("Connection Failed! Rebooting...");
     delay(5000);
@@ -36,10 +37,8 @@ void setup() {
       String type;
       if (ArduinoOTA.getCommand() == U_FLASH)
         type = "sketch";
-      else // U_SPIFFS
+      else
         type = "filesystem";
-
-      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
       Serial.println("Start updating " + type);
     })
     .onEnd([]() {
@@ -56,8 +55,8 @@ void setup() {
       else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
       else if (error == OTA_END_ERROR) Serial.println("End Failed");
     });
+  
   ArduinoOTA.begin();
-
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
